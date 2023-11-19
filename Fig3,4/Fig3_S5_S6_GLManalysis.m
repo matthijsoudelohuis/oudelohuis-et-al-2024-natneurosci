@@ -8,10 +8,7 @@
 startover
 
 %% Load dataset:
-% savedate                    = '03-01-23cross';
-% folderpath                  = fullfile('E:','Data','Analysis','neuroGLM',savedate);
-
-folderpath                  = fullfile('E:','Matlab','oudelohuis-et-al-2023-natneurosci','Fig3','GLMfits');
+folderpath                  = fullfile('E:','Matlab','oudelohuis-et-al-2024-natneurosci-data','GLMfits');
 fileList                    = dir(fullfile(folderpath,'*.mat'));
 fileList                    = {fileList(:).name};
 fileList                    = fileList(~contains(fileList,'X'));
@@ -69,7 +66,7 @@ sessionData.Experiment      = strrep(sessionData.Experiment,num2str(2),'');
 %% Parameters:
 params                      = loadstruct.params;
 params                      = MOL_getColors_CHDET(params);
-params.savedir              = 'E:\Documents\PhD\Figures\Project CHDET\Results - auV1\18GLM\';
+params.savedir              = 'E:\OneDrive\PhD\Figures\Project CHDET\Results - auV1\18GLM\';
 params.Yvarlabels           = {'True' 'Full model' 'Trial' 'Visual' 'Audio' 'Motor'};
 
 %% %remove animal 1012 with recordings in LM according to histology
@@ -187,7 +184,8 @@ idx     = strcmp(spikeData.area,'V1');
 fprintf('\nVariance explained across all V1 neurons (%2.3f, IQR %2.3f-%2.3f) (on trials excluding conflict trials) \n',...
     nanmedian(cvR2_nn(idx,1)),prctile(cvR2_nn(idx,1),[25 75]));
 
-%% Show cvR2 for each predictor subset and area:
+
+%% Show cvR2 for each predictor subset and area: 
 params.nExperiments     = length(params.Experiments);
 params.areas            = {'V1' 'A1'};% 'PPC' 'CG1'};
 params.nAreas           = length(params.areas); 
@@ -201,10 +199,24 @@ for iArea = 1:params.nAreas
     idx     = strcmp(spikeData.area,params.areas{iArea});
     for iC = 1:params.nShuffleCats
         tmp     = cvR2_cat_nn(idx,iC);
-        handles(iC) = bar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),0.18,'k');
-        set(handles(iC),'FaceColor',params.colors_splits{iC})
-        errorbar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),nanstd(tmp)/sqrt(sum(idx)),'k','LineWidth',1,'CapSize',6);
+        
+%         (boxplot)
+%         tmp     = tmp(tmp~=0);
+        h = boxplot(tmp, 'plotstyle','compact','positions',iArea + iC/(params.nShuffleCats+1),...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+        'colors','k','widths',0.18);
+        handles(iC) = h(5);
+        %         (barplot)
+%         handles(iC) = bar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),0.18,'k');
+%         set(handles(iC),'FaceColor',params.colors_splits{iC})
+%         errorbar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),nanstd(tmp)/sqrt(sum(idx)),'k','LineWidth',1,'CapSize',6);
     end
+end
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_splits{mod(j-1,4)+1},'FaceAlpha',1);
 end
 
 %statistics:
@@ -259,9 +271,13 @@ for iC = 1:4
 end
 writetable(tbl,'SourceData_Fig3d_AC_VarianceExplainedGLM.xlsx')
 
-set(gca,'XTick',1.5:1:5.5,'XTickLabels',params.areas,'YTick',0:0.01:0.2)
+set(gca,'XTick',1.5:1:5.5,'XTickLabels',params.areas,'YTick',0:0.02:0.2)
 xlim([1 1+params.nAreas])
 legend(handles(1:4),{'Trial' 'Visual' 'Audio' 'Motor'},'Location','NorthWest'); legend boxoff;
+
+export_fig(fullfile(params.savedir,sprintf('Box_cvR2_V1_AC_stats')),'-eps','-nocrop')
+ylim([-0.01 0.12])
+export_fig(fullfile(params.savedir,sprintf('Box_cvR2_V1_AC_axis')),'-eps','-nocrop')
 
 % export_fig(fullfile(params.savedir,sprintf('Bar_cvR2_V1_AC')),'-eps','-nocrop')
 
@@ -573,7 +589,7 @@ for iNeuron = 1:nNeurons %loop over neurons
     end
 end
 
-%% Fig 2f: mean firing rate response to trial types with predictions based on different subsets. 
+%% Fig 3f: mean firing rate response to trial types with predictions based on different subsets. 
 
 params.labels_splits    = {'Vthr' 'Vmax' 'Athr' 'Amax'};
 params.labels_cats      = {'Raw' 'Full' 'Trial' 'Vis' 'Aud' 'Motor'};
@@ -684,9 +700,7 @@ idx_area                = strcmp(spikeData.area,'V1');
 
 response                = squeeze(nanmean(ratemat(:,:,:,params.xtime>0 & params.xtime<=200e3),4)- nanmean(ratemat(:,:,:,params.xtime<0),4));
 
-figure; set(gcf,'units','normalized','Position',[0.25 0.5 0.2 0.18],'color','w'); hold all;
-
-handles = [];
+figure; set(gcf,'units','normalized','Position',[0.25 0.5 0.18 0.29],'color','w'); hold all;
 
 subplot(1,2,1); hold all;
 datatotest = squeeze(nanmean(response(idx_area,5,[3 4]),3));
@@ -695,10 +709,25 @@ for iExp = 1:3
     idx_exp                 = ismember(spikeData.session_ID,sessionData.session_ID(strcmp(sessionData.Experiment,params.Experiments(iExp))));
     idx                     = idx_area & idx_exp;
     datatoplot              = squeeze(nanmean(response(idx,5,[3 4]),3));
-    h = bar(iExp,nanmean(datatoplot),'FaceColor',params.colors_experiments{iExp});
-    errorbar(iExp,nanmean(datatoplot),nanstd(datatoplot)/sqrt(sum(idx_exp)),'k','LineWidth',1)
+            %         (barplot)
+%     h = bar(iExp,nanmean(datatoplot),'FaceColor',params.colors_experiments{iExp});
+%     errorbar(iExp,nanmean(datatoplot),nanstd(datatoplot)/sqrt(sum(idx_exp)),'k','LineWidth',1)
+    
+%     (boxplot)
+    h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
+    'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+    'colors','k','widths',0.8);
+    
 end
-ylim([0 0.8])
+
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+%     patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
+end
+
+ylim([-0.7 2])
 
 tbl             = table(datatotest,X_coh(idx_area),G_mou(idx_area),'VariableNames',{'Y','Var','Mouse'}); %Create table for mixed model
 lme             = fitlme(tbl,'Y~Var'); %construct linear mixed effects model with fixed effect of temporal window (NO random intercept for mice as cohorts are tested)
@@ -717,10 +746,24 @@ for iExp = 1:3
     idx_exp                 = ismember(spikeData.session_ID,sessionData.session_ID(strcmp(sessionData.Experiment,params.Experiments(iExp))));
     idx                     = idx_area & idx_exp;
     datatoplot              = squeeze(nanmean(response(idx,6,[3 4]),3));
-    h = bar(iExp,nanmean(datatoplot),'FaceColor',params.colors_experiments{iExp});
-    errorbar(iExp,nanmean(datatoplot),nanstd(datatoplot)/sqrt(sum(idx_exp)),'k','LineWidth',1)
+    %         (barplot)
+%     h = bar(iExp,nanmean(datatoplot),'FaceColor',params.colors_experiments{iExp});
+%     errorbar(iExp,nanmean(datatoplot),nanstd(datatoplot)/sqrt(sum(idx_exp)),'k','LineWidth',1)
+    %     (boxplot)
+    h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
+    'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+    'colors','k','widths',0.8);
 end
-ylim([0 0.8])
+
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+%     patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
+end
+
+ylim([-0.7 2])
+
 tbl             = table(datatotest,X_coh(idx_area),G_mou(idx_area),'VariableNames',{'Y','Var','Mouse'}); %Create table for mixed model
 lme             = fitlme(tbl,'Y~Var'); %construct linear mixed effects model with fixed effect of temporal window (NO random intercept for mice as cohorts are tested)
 stats           = dataset2table(anova(lme,'DFMethod','Satterthwaite')); %Perform ANOVA on model and output as matrix
@@ -742,7 +785,8 @@ set(gca,'XTick',1:3,'XTickLabels',params.ExperimentLabels)
 
 writetable(tbl,'SourceData_Fig3g_GLM_MotorResponse_V1.xlsx')
 
-export_fig(fullfile(params.savedir,sprintf('Bar_Rate_V1_3Cohorts')),'-eps','-nocrop')
+% export_fig(fullfile(params.savedir,sprintf('Bar_Rate_V1_3Cohorts')),'-eps','-nocrop')
+export_fig(fullfile(params.savedir,sprintf('Box_Rate_V1_3Cohorts')),'-eps','-nocrop')
 
 
 %% Fig S6f: Subsampling analysis:
@@ -751,9 +795,9 @@ idx_area                = strcmp(spikeData.area,'V1');
 response                = squeeze(nanmean(ratemat(:,:,:,params.xtime>0 & params.xtime<=200e3),4)- nanmean(ratemat(:,:,:,params.xtime<0),4));
 
 iExp = 1;
-nSubNeurons = sum(idx_V1 & ismember(spikeData.session_ID,sessionData.session_ID(strcmp(sessionData.Experiment,params.Experiments(iExp)))));
+nSubNeurons = sum(idx_area & ismember(spikeData.session_ID,sessionData.session_ID(strcmp(sessionData.Experiment,params.Experiments(iExp)))));
 
-figure; set(gcf,'units','normalized','Position',[0.25 0.5 0.2 0.18],'color','w'); hold all;
+f = figure; set(gcf,'units','normalized','Position',[0.25 0.5 0.2 0.18],'color','w'); hold all;
 handles = [];
 subplot(1,2,1); hold all;
 datatotest = squeeze(nanmean(response(idx_area,5,[3 4]),3));
@@ -767,12 +811,23 @@ for iExp = 1:3
         temp = squeeze(nanmean(response(idx(randi(length(idx),nSubNeurons,1)),5,[3 4]),3));
         datatoplot(i,1) = nanmean(temp);
     end
-
-    h = bar(iExp,prctile(datatoplot,50),'FaceColor',params.colors_experiments{iExp});
-    errorbar(iExp,prctile(datatoplot,50),prctile(datatoplot,95)-prctile(datatoplot,50),prctile(datatoplot,50)-prctile(datatoplot,5),'k','LineWidth',1)
+%   barplot:
+%     h = bar(iExp,prctile(datatoplot,50),'FaceColor',params.colors_experiments{iExp});
+%     errorbar(iExp,prctile(datatoplot,50),prctile(datatoplot,95)-prctile(datatoplot,50),prctile(datatoplot,50)-prctile(datatoplot,5),'k','LineWidth',1)
+%   boxplot:
+    h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
+    'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',5,...
+    'colors','k','widths',0.8,'datalim',prctile(datatoplot,[5,95]));
 end
 
-ylim([0 1.1])
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
+end
+
+ylim([0 1.5])
 
 tbl             = table(datatotest,X_coh(idx_area),G_mou(idx_area),'VariableNames',{'Y','Var','Mouse'}); %Create table for mixed model
 lme             = fitlme(tbl,'Y~Var'); %construct linear mixed effects model with fixed effect of temporal window (NO random intercept for mice as cohorts are tested)
@@ -795,20 +850,32 @@ for iExp = 1:3
         temp = squeeze(nanmean(response(idx(randi(length(idx),nSubNeurons,1)),6,[3 4]),3));
         datatoplot(i,1) = nanmean(temp);
     end
-
-    h = bar(iExp,prctile(datatoplot,50),'FaceColor',params.colors_experiments{iExp});
-    errorbar(iExp,prctile(datatoplot,50),prctile(datatoplot,95)-prctile(datatoplot,50),prctile(datatoplot,50)-prctile(datatoplot,5),'k','LineWidth',1)
+%   barplot:
+%     h = bar(iExp,prctile(datatoplot,50),'FaceColor',params.colors_experiments{iExp});
+%     errorbar(iExp,prctile(datatoplot,50),prctile(datatoplot,95)-prctile(datatoplot,50),prctile(datatoplot,50)-prctile(datatoplot,5),'k','LineWidth',1)
+%   boxplot:
+    h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
+    'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+    'colors','k','widths',0.8,'datalim',prctile(datatoplot,[5,95]));
 end
 
-ylim([0 1.1])
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
+end
+
 sigstar([1 3],0.009);
 sigstar([2 3],0.009);
+ylim([0 1.5])
 
 ylabel('Evoked response (sp/s)')
 set(gca,'XTick',1:3,'XTickLabels',params.ExperimentLabels)
 writetable(tbl,'SourceData_FigS6f_GLM_MotorResponse_V1.xlsx')
 
-export_fig(fullfile(params.savedir,sprintf('Bar_Rate_V1_3Cohorts_subsampled')),'-eps','-nocrop')
+% export_fig(fullfile(params.savedir,sprintf('Bar_Rate_V1_3Cohorts_subsampled')),'-eps','-nocrop')
+export_fig(fullfile(params.savedir,sprintf('Box_Rate_V1_3Cohorts_subsampled')),'-eps','-nocrop')
 
 %% %
 

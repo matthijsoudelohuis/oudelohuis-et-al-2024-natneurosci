@@ -24,10 +24,10 @@ for iVid = 1:nVids
 end
 
 %% Save 
-save('Dataset2_5.mat',g)
+save('Dataset2_4.mat',g)
 
 %% or load preprocessed data:
-load('Dataset2_5.mat')
+load('Dataset2_4.mat')
 
 %% Make figure and determine n video PCs based on threshold on var explained:
 thresh = 0.8;

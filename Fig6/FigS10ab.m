@@ -136,35 +136,35 @@ ylim([-0.2 1])
 legend(fliplr(handles),params.triallabels(8:-1:5),'Location','NorthWest','FontSize',10); legend boxoff;
 MOL_prepfigAI
 
-%%
+%% Boxplot of mean response:
 params.t_respwin_start  = 0;
 params.t_respwin_stop   = 3e6;
 
 hist_mat_baselinecorr       = hist_mat - repmat(mean(hist_mat(:,params.xtime<0),2),1,nTimebins);
 maxresp                     = max(hist_mat_baselinecorr(:,params.xtime>params.t_respwin_start & params.xtime<params.t_respwin_stop),[],2);
 
-meantoplot                  = NaN(length(splits),1);
-errortoplot                 = NaN(length(splits),1);
-
-for iSplit = 1:length(splits)
-    meantoplot(iSplit)    = nanmean(maxresp(splits{iSplit},:),1);
-    errortoplot(iSplit)   = nanstd(maxresp(splits{iSplit},:),1);
-    errortoplot(iSplit)   = errortoplot(iSplit,:) / sqrt(sum(splits{iSplit}));
-end
-
 figure; hold all; set(gcf,'units','normalized','Position',[0.45 0.35 0.17 0.24],'color','w');
-h = [];
+fprintf('\nn=')
 for iSplit = 1:length(splits)
-    h(iSplit) = bar(iSplit,meantoplot(iSplit),0.8);
-    set(h(iSplit),'facecolor',params.trialcolors{iSplit});
-    z = errorbar(iSplit,meantoplot(iSplit),errortoplot(iSplit),'k.','LineWidth',2);
-    errorbar_tick(z,0.001,'units')
+    boxplot(maxresp(splits{iSplit},:), 'plotstyle','compact','positions',iSplit,...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',0.5,...
+        'colors','k','widths',0.6);
+    fprintf('%d, ',sum(splits{iSplit}))
+end
+fprintf(' trials in conditions from left to right\n')
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.trialcolors{j},'FaceAlpha',1);
 end
 
 set(gca,'XTick',1:8,'XTickLabel',params.triallabels,'XTickLabelRotation',45)
-set(gca,'YTick',[0 0.5  1 1.5])
+set(gca,'YTick',[0 0.5  1 1.5 2])
 ylabel('Pupil dilation (z-score)')
-ylim([0 1.5])
+ylim([-0.5 2.5])
+
+
 
 %% Statistics:
 

@@ -8,7 +8,7 @@ startover
 
 %% Parameters for loading: 
 %Subselect all MST animals from all fitted GLM sessions: (excluding NE and UST with no muscimol)
-params.animals              = {'2003' '2009' '2010' '2011' '2012' '2013' '2019' '2020' '2021' '2022' '2023' '2026' '2027' '2030' '2044' '2045'}; 
+params.animals              = {'2003' '2009' '2010' '2011' '2012' '2013' '2019' '2020' '2021' '2022' '2023' '2026' '2027' '2030' '2031' '2044' '2045'}; 
 
 %% Load dataset:
 % savedate                    = '04-01-23musc';
@@ -71,7 +71,12 @@ idx_man                     = [idx_ctrl idx_musc];
 
 params.labels_mans          = {'Ctrl' 'Mus'};
 
-%% dimensions dataset:
+%% Report dataset:
+% fprintf('Dataset: %d sessions, %d trials, %d neurons, %d videos\n',length(sessionData.session_ID),length(trialData.session_ID),length(spikeData.session_ID),length(sessionData.session_ID));
+
+fprintf('Dataset Mus/Ctrl: %d/%d sessions, %d/%d neurons,\n',...
+    sum(idx_ses_musc),sum(idx_ses_ctrl),sum(idx_musc),sum(idx_ctrl))
+
 nSessions           = length(sessionData.session_ID);
 nNeurons            = length(spikeData.session_ID);
 nTrials             = length(trialData.session_ID);

@@ -210,6 +210,13 @@ ylabel('Dominance')
 xlim([0.5 2.5])
 ylim([-1 1])
 
+%% Multi-level statistics: 
+nTrials         = length(trialData.session_ID);
+G_mou           = cell(nTrials,1);
+uMice           = unique(sessionData.mousename);
+for iMouse = 1:length(uMice)
+    G_mou(ismember(trialData.session_ID,sessionData.session_ID(strcmp(sessionData.mousename,uMice{iMouse})))) = uMice(iMouse);
+end
 
 %% Fig 5e: Muscimol on RT effects:
 labels = {'Vthr','Vmax','Athr','Amax'};
@@ -235,8 +242,23 @@ params.colors_splits = [params.colors_visual_opto(1:2) params.colors_visual_opto
 figure; hold all; set(gcf,'units','normalized','Position',[0.2 0.4 0.2 0.23],'color','w');
 
 for iSplit = 1:params.nSplits
-    bar(iSplit,nanmean(trialData.responseLatency(splits{iSplit})),0.6,'FaceColor',params.colors_splits{iSplit});
-    z = errorbar(iSplit,nanmean(trialData.responseLatency(splits{iSplit})),nanstd(trialData.responseLatency(splits{iSplit}))/sqrt(sum(splits{iSplit})),'Color','k','LineWidth',1); %#ok<*NANSTD>
+%     bar(iSplit,nanmean(trialData.responseLatency(splits{iSplit})),0.6,'FaceColor',params.colors_splits{iSplit});
+%     z = errorbar(iSplit,nanmean(trialData.responseLatency(splits{iSplit})),nanstd(trialData.responseLatency(splits{iSplit}))/sqrt(sum(splits{iSplit})),'Color','k','LineWidth',1); %#ok<*NANSTD>
+%         old barplot:
+%         handles(iC) = bar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),0.18,'k');
+%         set(handles(iC),'FaceColor',params.colors_splits{iC})
+%         errorbar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),nanstd(tmp)/sqrt(sum(idx)),'k','LineWidth',1,'CapSize',6);
+
+    h = boxplot(trialData.responseLatency(splits{iSplit}), 'plotstyle','compact','positions',iSplit,...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',0.5,...
+        'colors','k','widths',0.6);
+    handles = h(5);
+        end
+h = findobj(gca,'tag','Outliers');
+delete(h)
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_splits{j},'FaceAlpha',1);
 end
 
 for iSplit = 1:2:params.nSplits
@@ -256,8 +278,9 @@ end
 ylabel('Reaction time (ms)'); xlabel('');
 xlim([0.5 params.nSplits+0.5])
 set(gca,'XTick',(1:2:params.nSplits)+0.5,'XTickLabels',{'Vthr' 'Vmax' 'Athr' 'Amax'},'YTick',[0 200e3 400e3 600e3],'YTickLabels',[0 200 400 600])
-
-filename = sprintf('Bar_RT_SalMus_trialtypes.eps');
+ylim([0 800e3])
+% filename = sprintf('Bar_RT_SalMus_trialtypes.eps');
+filename = sprintf('Box_RT_SalMus_trialtypes.eps');
 export_fig(fullfile(params.savedir,filename),gcf);
 
 

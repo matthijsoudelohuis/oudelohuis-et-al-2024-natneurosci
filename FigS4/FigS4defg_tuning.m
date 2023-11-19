@@ -39,6 +39,7 @@ save('DatasetS4_3.mat','params','sessionData','trialData','spikeData')
 
 %% Or start script from saved dataset:
 load DatasetS4_3.mat
+rng(500)
 
 %% Fig S4d,e  - show raster plot of example neurons 
 cell_IDs            = {};
@@ -221,13 +222,25 @@ r_sig_freq_tuned    = r_sig_frq(idx_freq,idx_freq);
 
 %Make figure:
 figure; set(gcf,'units','normalized','Position',[0.15 0.43 0.1 0.21],'color','w'); hold all
-bar(1,nanmean(r_sig_ori_tuned(:)),0.6,'b')
-errorbar(1,nanmean(r_sig_ori_tuned(:)),nanstd(r_sig_ori_tuned(:))/sqrt(sum(idx_ori)),'k-','LineWidth',1)
-bar(2,nanmean(r_sig_freq_tuned(:)),0.6,'r')
-errorbar(2,nanmean(r_sig_freq_tuned(:)),nanstd(r_sig_freq_tuned(:))/sqrt(sum(idx_freq)),'k-','LineWidth',1)
+% bar(1,nanmean(r_sig_ori_tuned(:)),0.6,'b')
+% errorbar(1,nanmean(r_sig_ori_tuned(:)),nanstd(r_sig_ori_tuned(:))/sqrt(sum(idx_ori)),'k-','LineWidth',1)
+% bar(2,nanmean(r_sig_freq_tuned(:)),0.6,'r')
+% errorbar(2,nanmean(r_sig_freq_tuned(:)),nanstd(r_sig_freq_tuned(:))/sqrt(sum(idx_freq)),'k-','LineWidth',1)
+
+datamat  = NaN(500,2);
+temp = r_sig_ori_tuned(~isnan(r_sig_ori_tuned));
+datamat(1:length(temp),1)= temp;
+temp = r_sig_freq_tuned(~isnan(r_sig_freq_tuned));
+datamat(1:length(temp),2)= temp;
+
+h   = violinplot(datamat,{'Ori' 'Freq'},'EdgeColor',[1 1 1],'BandWidth',0.1,...
+        'Width',0.3,'ShowData',false,'ViolinAlpha',1);
+h(1).ViolinColor = 'b';
+h(2).ViolinColor = 'r';
+
 xlim([0.5 2.5])
-ylim([-0.1 0.4])
-set(gca,'XTick',[1 2],'XTickLabels',{'Ori' 'Freq'},'YTick',[-0.1 0 0.2 0.4],'FontSize',8)
+ylim([-0.8 1])
+set(gca,'XTick',[1 2],'XTickLabels',{'Ori' 'Freq'},'YTick',[-0.5 0 0.5 1],'FontSize',8)
 ylabel('Signal correlation','FontSize',9)
 
 %statistics:
@@ -237,10 +250,10 @@ for iMouse = 1:length(uMice)
     G_mou(ismember(spikeData.session_ID,sessionData.session_ID(strcmp(sessionData.mousename,uMice{iMouse})))) = uMice(iMouse);
 end
 
-G_mou_ori = G_mou(gOSI_ori_sign==1);
-G_mou_ori = repmat(G_mou_ori,1,numel(G_mou_ori));
-G_mou_freq = G_mou(gOSI_freq_sign==1);
-G_mou_freq = repmat(G_mou_freq,1,numel(G_mou_freq));
+G_mou_ori   = G_mou(gOSI_ori_sign==1);
+G_mou_ori   = repmat(G_mou_ori,1,numel(G_mou_ori));
+G_mou_freq  = G_mou(gOSI_freq_sign==1);
+G_mou_freq  = repmat(G_mou_freq,1,numel(G_mou_freq));
 
 Y_r_sig = [r_sig_ori_tuned(:); r_sig_freq_tuned(:)];
 X_mod = [zeros(length(r_sig_ori_tuned(:)),1); ones(length(r_sig_freq_tuned(:)),1)];
@@ -255,7 +268,7 @@ sigstar([1 2],p)
 fprintf('n=%d signal correlations from %d orientation-tuned V1 neurons, \n',sum(~isnan(r_sig_ori_tuned(:))),sum(idx_ori))
 fprintf('n=%d from %d frequency-tuned V1 neurons)\n',sum(~isnan(r_sig_freq_tuned(:))),sum(idx_freq))
 
-% export_fig(fullfile(params.savedir,'SigCor_Bar_Det'),'-eps','-nocrop')
+export_fig(fullfile(params.savedir,'SigCor_Violin_Det'),'-eps','-nocrop')
 writetable(tbl,'SourceData_S4g_SignalCorr.xlsx')
 
 %%

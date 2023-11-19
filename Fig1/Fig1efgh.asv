@@ -211,7 +211,7 @@ for iExp = 1:params.nExperiments %for each experiment select appropriate neurons
     fprintf('%d, ',sum(idx_all))
     handles(iExp)   = plot(params.xtime*1e-3,squeeze(nanmean(matAudRate(idx_all,:),1)),'Color',params.colors_experiments{iExp}); %#ok<SAGROW>
 end
-fprintf(' auditory responsive neurons for NE, UST, MST respectively\n')
+fpr
 % rectangle('Position',[0 0 200 2.25],'FaceColor',[0.3 0.3 .3],'EdgeColor','none'); %uncomment for shaded window display
 
 %Figure make up:

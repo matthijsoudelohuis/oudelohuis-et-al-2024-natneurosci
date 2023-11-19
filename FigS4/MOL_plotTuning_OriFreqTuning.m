@@ -70,7 +70,7 @@ for iNeuron = 1:nNeurons %Loop over all neurons:
                 set(gca,'YLim',[0 y_max],'YTick',[0 y_max])
             end
 
-            
+            fprintf('n=%d trials\n',length(temptrialData.session_ID))
 %             tightfig();
             if isfield(params,'exportfig') && params.exportfig
                 export_fig(fullfile(params.savedir,sprintf('ExNeuron_Tuning_%s',spikeData.cell_ID{cell_idx})),'-eps','-nocrop')

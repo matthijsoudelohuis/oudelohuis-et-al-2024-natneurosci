@@ -1,6 +1,5 @@
 %% Load exported orientation decoding scores from python: 
-% datadir         = 'E:\OneDrive\Manuscripts\2023 - AuV1\material_pietro\csv_files\';
-datadir         = 'E:\Matlab\oudelohuis-et-al-2023-natneurosci\Fig6\';
+datadir         = 'E:\Matlab\oudelohuis-et-al-2024-natneurosci\Fig6\';
 filename        = fullfile(datadir,'SourceData_Fig6i_SVM_coefficients.csv');
 tbl             = readtable(filename);
 

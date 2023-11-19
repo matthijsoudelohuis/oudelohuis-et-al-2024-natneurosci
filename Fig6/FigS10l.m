@@ -82,6 +82,7 @@ for iSplit = 1:4
 end
 legend(handles,{'Sub' 'Thr' 'Sup' 'Max'},'Location','NorthWest','FontSize',12); legend boxoff;
 
+fprintf('%d A,%d V,%d AV trials',sum(any([splits{1:4}],2)),sum(any([splits{5:8}],2)),sum(any([splits{9:16}],2)))
 ylabel('Reaction time (ms)','FontSize',10)
 ylim([300 550])
 filename = sprintf('ConflictRT.eps');
