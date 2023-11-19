@@ -1,6 +1,6 @@
-# oudelohuis-et-al-2023-natneurosci
-Code accompanying Oude Lohuis et al. 'Triple dissociation of visual, auditory and motor processing in primary visual cortex'
-Published in Nature Neuroscience 2023
+# oudelohuis-et-al-2024-natneurosci
+Code accompanying Oude Lohuis et al. 'Triple dissociation of visual, auditory and motor processing in mouse primary visual cortex'
+Published in Nature Neuroscience 2024
 
 Code Files: The code is organized in directories per main figure. Code associated with producing data presented in the supplementary information is found within the folder of the main figure that the supplementary figure belongs to. All files are named by their corresponding Figures in the paper:
 
