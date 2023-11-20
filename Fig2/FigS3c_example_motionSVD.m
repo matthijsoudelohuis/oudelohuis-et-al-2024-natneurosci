@@ -1,9 +1,10 @@
-%% Oude Lohuis et al. 2023 Nat Neurosci
+%% Oude Lohuis et al. 2024 Nat Neurosci
 % Triple dissociation of auditory, visual, and motor processing in primary visual cortex
 % MOL (C) 2023
+% Show video motion across the face as energy
 
 startover
-load('Dataset2_3.mat')
+load('Dataset2_2.mat')
 
 %% 
 figure; set(gcf,'units','normalized','Position',[0.45 0.4 0.24 0.46],'color','w')

@@ -1,33 +1,12 @@
 %% Script that analyzes sensory responses to auditory stimuli across passive and active task versions:
-% as reported in Oude Lohuis et al. 2023 Nat Neurosci
+% as reported in Oude Lohuis et al. 2024 Nat Neurosci
 % MOL (C) 2023
 
 %%
 startover
-videoFiles = {};
 
-%% Vids from separate animals:
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2028\2019-12-13_12-46-26\VisOnlyTwolevels\VT1.0001';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2035\2019-12-16_15-38-43\VisOnlyTwolevels\VT1.0001';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2044\2021-04-28_14-00-10\ChangeDetectionConflict\VT1.0001';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2030\2020-01-21_14-41-38\ChangeDetectionConflict\VT1.0002';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2029\2019-12-12_13-45-39\VisOnlyTwolevels\VT1.0002';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2034\2019-12-18_13-31-12\VisOnlyTwolevels\VT1.0002';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2045\2021-04-29_15-55-10\ChangeDetectionConflict\VT1.0001';
-videoFiles{end+1}       = 'F:\Data\CHDET\RawData\2044\2021-04-23_13-12-02\ChangeDetectionConflict\VT1.0001';
-
-%% Loop over data
-nVids       = length(videoFiles);
-g           = NaN(nVids,500);
-for iVid = 1:nVids
-    g(iVid,:) = compVarExpl(videoFiles{iVid});
-end
-
-%% Save 
-save('Dataset2_4.mat',g)
-
-%% or load preprocessed data:
-load('Dataset2_4.mat')
+%% load preprocessed data:
+load('Dataset2_3.mat')
 
 %% Make figure and determine n video PCs based on threshold on var explained:
 thresh = 0.8;
