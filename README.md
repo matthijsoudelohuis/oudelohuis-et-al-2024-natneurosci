@@ -9,9 +9,9 @@ The code is organized in directories per figure, and all scripts are named by th
 Data description: 
 
 Because of the collection of different experiments and the size of the data, the dataset was split in manageable chunks that were saved separately to facilitate loading the relevant data for different analyses. The following presents the list of separate dataset files that were kept as small as possible for that specific question and analysis: 
-•	Dataset1_1.mat -  Behavioral data of performance across the three task versions:
-•	Dataset1_2.mat -  V1 neural data during task performance in the three cohorts without any cortical manipulations, trial manipulations, etc. (no video data included)
-•	Dataset2_1.mat -  Neural, behavioral, spiking and video data during task performance in the three cohorts. Used for analysis of relationship video motion to V1 sensory tuning.
+Dataset1_1.mat -  Behavioral data of performance across the three task versions:
+Dataset1_2.mat -  V1 neural data during task performance in the three cohorts without any cortical manipulations, trial manipulations, etc. (no video data included)
+Dataset2_1.mat -  Neural, behavioral, spiking and video data during task performance in the three cohorts. Used for analysis of relationship video motion to V1 sensory tuning.
 •	Dataset2_2.mat -  Video motion in an example session
 •	Dataset2_3.mat -  Cumulative variance explained by video PCs
 •	Dataset3_1.mat -  Filtered neural data in V1 and AC to compare response timing
