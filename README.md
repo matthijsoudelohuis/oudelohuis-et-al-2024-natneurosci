@@ -15,27 +15,48 @@ Dataset1_1.mat -  Behavioral data of performance across the three task versions:
 Dataset1_2.mat -  V1 neural data during task performance in the three cohorts without any cortical manipulations, trial manipulations, etc. (no video data included)
 
 Dataset2_1.mat -  Neural, behavioral, spiking and video data during task performance in the three cohorts. Used for analysis of relationship video motion to V1 sensory tuning.
-•	Dataset2_2.mat -  Video motion in an example session
-•	Dataset2_3.mat -  Cumulative variance explained by video PCs
-•	Dataset3_1.mat -  Filtered neural data in V1 and AC to compare response timing
-•	Dataset5_1.mat -  Average spiking data across the session with and without muscimol
-•	Dataset5_2.mat -  Behavioral data in sessions with and without muscimol
-•	Dataset5_3.mat -  Single neuron sensory responses with and without muscimol
-•	Dataset5_4.mat -  Video motion data in sessions with and without muscimol
-•	Dataset6_1.mat -  Neural data during conflict trials
-•	Dataset6_2.mat -  Behavioral data in conflict trials for reaction times
-•	Dataset6_3.mat -  Video motion data during A, V, AV trials
-•	Dataset6_4.mat -  Behavioral data with stimulus onset asynchronies in the AV trials
-•	Dataset6_5.mat -  Behavioral data for dominance computation in conflict trials
-•	DatasetS4_1.mat -  Example session in audiovisual detection task.
-•	DatasetS4_2.mat – Behavioral data of animals (n=3) in audiovisual detection task.
-•	DatasetS4_3.mat – V1 neural data during audiovisual detection task.
-•	DatasetS9_1.mat -  Single session local field potential data in V1 with optogenetic stimulation of auditory cortical fibers to V1.
-•	DatasetS9_2.mat -  Single session local field potential data in V1 after checkerboard stimulation.
-•	DatasetS9_3.mat – Local field potential data in V1 for all sessions with good LFP signal.
-•	GLMfits – fits of generalized linear model with sensory and behavioral data to spiking data, per session during task performance across the three cohorts
-•	GLMfits_Musc – GLM fits of sessions with muscimol and control
-•	GLMfits_motor – GLM fits with 500 video PCs as predictors to assess V1 firing rate predictions based on video dimensionality
+
+Dataset2_2.mat -  Video motion in an example session
+
+Dataset2_3.mat -  Cumulative variance explained by video PCs
+
+Dataset3_1.mat -  Filtered neural data in V1 and AC to compare response timing
+
+Dataset5_1.mat -  Average spiking data across the session with and without muscimol
+
+Dataset5_2.mat -  Behavioral data in sessions with and without muscimol
+
+Dataset5_3.mat -  Single neuron sensory responses with and without muscimol
+
+Dataset5_4.mat -  Video motion data in sessions with and without muscimol
+
+Dataset6_1.mat -  Neural data during conflict trials
+
+Dataset6_2.mat -  Behavioral data in conflict trials for reaction times
+
+Dataset6_3.mat -  Video motion data during A, V, AV trials
+
+Dataset6_4.mat -  Behavioral data with stimulus onset asynchronies in the AV trials
+
+Dataset6_5.mat -  Behavioral data for dominance computation in conflict trials
+
+DatasetS4_1.mat -  Example session in audiovisual detection task.
+
+DatasetS4_2.mat – Behavioral data of animals (n=3) in audiovisual detection task.
+
+DatasetS4_3.mat – V1 neural data during audiovisual detection task.
+
+DatasetS9_1.mat -  Single session local field potential data in V1 with optogenetic stimulation of auditory cortical fibers to V1.
+
+DatasetS9_2.mat -  Single session local field potential data in V1 after checkerboard stimulation.
+
+DatasetS9_3.mat – Local field potential data in V1 for all sessions with good LFP signal.
+
+GLMfits – fits of generalized linear model with sensory and behavioral data to spiking data, per session during task performance across the three cohorts
+
+GLMfits_Musc – GLM fits of sessions with muscimol and control
+
+GLMfits_motor – GLM fits with 500 video PCs as predictors to assess V1 firing rate predictions based on video dimensionality
 
 
 This repository was tested on MATLAB R2016a, MATLAB R2020a with the following toolboxes: Optimization toolbox, Curve fitting toolbox, Statistics and machine learning toolbox, Signal processing toolbox, Image processing toolbox, GUI layout toolbox
