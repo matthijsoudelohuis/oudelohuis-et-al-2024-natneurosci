@@ -1,8 +1,8 @@
-%% Oude Lohuis et al. 2023 Nat Neurosci
+%% Oude Lohuis et al. 2024 Nat Neurosci
 % Triple dissociation of auditory, visual, and motor processing in primary visual cortex
 % MOL (C) 2023
 
-% Script analyzes motion in the video with and without muscimol
+% Script that analyzes V1 spiking across the session with and without muscimol
 
 startover
 

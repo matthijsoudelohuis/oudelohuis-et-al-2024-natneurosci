@@ -4,7 +4,7 @@
 
 % Script to plot raw trace after muscimol injection
 
-%Data not included in the repository!
+% Data not included in the repository!
 
 %% 
 params              = params_histresponse;

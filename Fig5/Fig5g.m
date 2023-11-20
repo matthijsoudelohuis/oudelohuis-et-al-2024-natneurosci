@@ -2,7 +2,7 @@
 % Triple dissociation of auditory, visual, and motor processing in primary visual cortex
 % MOL (C) 2023
 
-% Script analyzes firing rate in V1 with and without muscimol in AC
+% Script analyzes video motion in sessions with and without muscimol
 
 startover
 
@@ -72,37 +72,9 @@ nSessions = length(sessionData.session_ID);
 
 nTrials             = length(trialData.stimChange);
 
-%% Fig 5g: mean motion response for the different cohorts:
+%% Fig 5g: mean motion response
 
 params.lines_mans           = {'-' ':'};
-
-params.nSplits  = 4;
-splits          = {};
-splits{1}       = strcmp(trialData.trialType,'X') & trialData.visualOriChangeNorm==2;
-splits{2}       = strcmp(trialData.trialType,'X') & trialData.visualOriChangeNorm==3;
-splits{3}       = strcmp(trialData.trialType,'Y') & trialData.audioFreqChangeNorm==2;
-splits{4}       = strcmp(trialData.trialType,'Y') & trialData.audioFreqChangeNorm==3;
-
-params.nSplits  = 4;
-splits          = {};
-splits{1}       = strcmp(trialData.trialType,'Y') & trialData.vecResponse==3;
-splits{2}       = strcmp(trialData.trialType,'Y') & trialData.vecResponse==1;
-splits{3}       = strcmp(trialData.trialType,'Y') & trialData.vecResponse==3;
-splits{4}       = strcmp(trialData.trialType,'Y') & trialData.vecResponse==1;
-
-% params.nSplits  = 2;
-% splits          = {};
-% splits{1}       = strcmp(trialData.trialType,'X');
-% splits{2}       = strcmp(trialData.trialType,'Y');
-% splits{3}       = strcmp(trialData.trialType,'X');
-% splits{4}       = strcmp(trialData.trialType,'Y');
-
-% params.nSplits  = 4;
-% splits          = {};
-% splits{1}       = strcmp(trialData.trialType,'X') & trialData.visualOriChangeNorm==2 & trialData.vecResponse==2;
-% splits{2}       = strcmp(trialData.trialType,'X') & trialData.visualOriChangeNorm==3 & trialData.vecResponse==2;
-% splits{3}       = strcmp(trialData.trialType,'Y') & trialData.audioFreqChangeNorm==2 & trialData.vecResponse==1;
-% splits{4}       = strcmp(trialData.trialType,'Y') & trialData.audioFreqChangeNorm==3 & trialData.vecResponse==1;
 
 params.nSplits  = 1;
 splits          = {};

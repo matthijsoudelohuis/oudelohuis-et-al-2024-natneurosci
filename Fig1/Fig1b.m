@@ -1,5 +1,6 @@
 %% Script that analyzes primary behavioral measures of performance across the three task versions:
 % MOL (C) 2024
+% Oude Lohuis et al. 2024 Nat Neurosci
 
 %% Set parameters of data to load:
 params.Experiments          = {'ChangeDetectionConflictDecor' 'VisOnlyPsychophysics' {'BehaviorConflict' 'BehaviorPsychophysics'}};

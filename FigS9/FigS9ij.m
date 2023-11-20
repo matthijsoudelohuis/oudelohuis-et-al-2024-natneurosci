@@ -1,4 +1,4 @@
-% Oude Lohuis et al. 2023
+%% Oude Lohuis et al. 2024 Nat Neurosci
 startover
 
 %% Parameters:

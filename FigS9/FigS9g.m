@@ -4,6 +4,7 @@
 % Data not included in the repository!!! (too large)
 
 startover
+load('DatasetS9_3.mat');
 
 %% Parameters:
 params.linewidth        = 0.25; %stroke weight

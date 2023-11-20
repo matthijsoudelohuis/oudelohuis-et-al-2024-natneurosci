@@ -1,7 +1,7 @@
 %% Script that shows spiking activity and video motion following auditory stimuli
 % in a audiovisual change detection task
 % MOL (C) 2023
-% as reported in Oude Lohuis et al. 2023 Nat Neurosci
+% Oude Lohuis et al. 2024 Nat Neurosci
 % "Triple dissociation of auditory, visual and motor processing in primary visual cortex"
 
 startover
@@ -72,10 +72,10 @@ fprintf('Dataset: %d sessions, %d trials, %d neurons, %d videos\n',length(sessio
 nSessions = length(sessionData.session_ID);
 
 %% Save dataset:
-save('Dataset2_2.mat','params','sessionData','trialData')
+save('Dataset2_2.mat','params','sessionData','trialData','videoData')
 
 %% Or load dataset:
-load Dataset2_2.mat
+load Dataset2_1.mat
 
 
 
@@ -112,13 +112,13 @@ MOL_plotRasterVid_auV1(sessionData,trialData,spikeData,video_hist_z,cell_IDs,par
 %% Show raster plot of example neurons showing auditory responses irrespective of movement:
 
 cell_IDs            = {};
-% cell_IDs{end+1}     = '20122018081611121'; %former paper example: unrelated to movement
 cell_IDs{end+1}     =     '20102018081611378'; %new paper example
 
-% cell_IDs{end+1}     = '10122019041031329'; %Auditory no motor example cell glm
  
 % %Other examples:
+% cell_IDs{end+1}     = '20122018081611121'; %auditory unrelated to movement
 % cell_IDs{end+1}     = '20102018081611325';
+% cell_IDs{end+1}     = '10122019041031329'; %Auditory no motor example cell glm
 % cell_IDs{end+1}     = '20122018081431167'; %fast transient
 % cell_IDs{end+1}     = '20112018081011160'; %fast transient
 % cell_IDs{end+1}     = '20092018082211178'; %sharp onset, not related to total movement
@@ -134,7 +134,7 @@ cell_IDs{end+1}     =     '20102018081611378'; %new paper example
 % cell_IDs{end+1}     = '20102018081311171'; %
 
 params.trialcategories = 'Saliency';
-params.exportfig = 1;
+params.exportfig    = 1;
 MOL_plotRasterVid_auV1(sessionData,trialData,spikeData,video_hist_z,cell_IDs,params)
 
 

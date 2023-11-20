@@ -1,4 +1,4 @@
-%% Oude Lohuis et al. 2023 Nat Neurosci
+%% Oude Lohuis et al. 2024 Nat Neurosci
 % Triple dissociation of auditory, visual, and motor processing in primary visual cortex
 % MOL (C) 2023
 

@@ -9,9 +9,7 @@
 startover
 
 %% Load dataset:
-% savedate                    = '03-01-23cross';
-% folderpath                  = fullfile('E:','Data','Analysis','neuroGLM',savedate);
-folderpath                  = fullfile('E:','Matlab','oudelohuis-et-al-2023-natneurosci','Fig3,4','GLMfits');
+folderpath                  = fullfile('E:','Matlab','oudelohuis-et-al-2023-natneurosci-data','GLMfits');
 fileList                    = dir(fullfile(folderpath,'*.mat'));
 fileList                    = {fileList(:).name};
 fileList                    = fileList(~contains(fileList,'X'));
