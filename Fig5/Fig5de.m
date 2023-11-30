@@ -248,17 +248,19 @@ for iSplit = 1:params.nSplits
 %         handles(iC) = bar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),0.18,'k');
 %         set(handles(iC),'FaceColor',params.colors_splits{iC})
 %         errorbar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),nanstd(tmp)/sqrt(sum(idx)),'k','LineWidth',1,'CapSize',6);
-
-    h = boxplot(trialData.responseLatency(splits{iSplit}), 'plotstyle','compact','positions',iSplit,...
-        'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',0.5,...
+    boxplotPerc(trialData.responseLatency(splits{iSplit}), [10,90],'plotstyle','compact','positions',iSplit,...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,...
         'colors','k','widths',0.6);
+%     h = boxplot(trialData.responseLatency(splits{iSplit}), 'plotstyle','compact','positions',iSplit,...
+%         'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',0.5,...
+%         'colors','k','widths',0.6);
     handles = h(5);
-        end
+end
 h = findobj(gca,'tag','Outliers');
 delete(h)
 h = findobj(gca,'Tag','Box');
 for j=1:length(h)
-    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_splits{j},'FaceAlpha',1);
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_splits{length(h)-j+1},'FaceAlpha',1);
 end
 
 for iSplit = 1:2:params.nSplits
@@ -277,8 +279,8 @@ end
 
 ylabel('Reaction time (ms)'); xlabel('');
 xlim([0.5 params.nSplits+0.5])
-set(gca,'XTick',(1:2:params.nSplits)+0.5,'XTickLabels',{'Vthr' 'Vmax' 'Athr' 'Amax'},'YTick',[0 200e3 400e3 600e3],'YTickLabels',[0 200 400 600])
-ylim([0 800e3])
+set(gca,'XTick',(1:2:params.nSplits)+0.5,'XTickLabels',{'Vthr' 'Vmax' 'Athr' 'Amax'},'YTick',[0 200e3 400e3 600e3 800e3],'YTickLabels',[0 200 400 600 800])
+ylim([0 900e3])
 % filename = sprintf('Bar_RT_SalMus_trialtypes.eps');
 filename = sprintf('Box_RT_SalMus_trialtypes.eps');
 export_fig(fullfile(params.savedir,filename),gcf);
