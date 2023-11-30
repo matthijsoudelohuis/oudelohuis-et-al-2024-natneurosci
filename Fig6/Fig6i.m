@@ -2,6 +2,7 @@
 datadir         = 'E:\Matlab\oudelohuis-et-al-2024-natneurosci\Fig6\';
 filename        = fullfile(datadir,'SourceData_Fig6i_SVM_coefficients.csv');
 tbl             = readtable(filename);
+writetable(tbl,fullfile(datadir,'SourceData_Fig6i_SVM_coefficients.xlsx'));
 
 %% Correlation audiovisual and visual trials orientation decoding weights:
 nNeurons = size(tbl,1);

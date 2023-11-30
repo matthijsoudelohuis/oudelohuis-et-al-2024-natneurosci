@@ -1,7 +1,8 @@
 %% Load exported orientation decoding scores from python: 
-datadir         = 'E:\Matlab\oudelohuis-et-al-2023-natneurosci\FigS3\';
+datadir         = 'E:\Matlab\oudelohuis-et-al-2024-natneurosci\FigS3\';
 filename        = fullfile(datadir,'SourceData_FigS3_audiofreq_in_big_change_feb8_singlesess_200.csv');
 tbl             = readtable(filename);
+writetable(tbl,fullfile(datadir,'SourceData_FigS3_audiofreq_in_big_change.xlsx'));
 
 %% Correlation frequency decoding performance spikes and video:
 lme             = fitlme(tbl,'score_video~score_spikes+(1|animal_id)'); %construct linear mixed effects model with fixed effect of temporal window and random intercept for different mice
@@ -24,6 +25,7 @@ fprintf('F(%d,%2.0f)=%1.2f, p=%1.3f; \n',stats{2,3},stats{2,4},stats{2,2},stats{
 %% Load exported orientation decoding scores from python: 
 filename        = fullfile(datadir,'SourceData_FigS3_visualori_in_big_change_feb8_singlesess_200.csv');
 tbl             = readtable(filename);
+writetable(tbl,fullfile(datadir,'SourceData_FigS3_visualori_in_big_change.xlsx'));
 
 %% Correlation orientation decoding performance spikes and video::
 lme             = fitlme(tbl,'score_video~score_spikes+(1|animal_id)'); %construct linear mixed effects model with fixed effect of temporal window and random intercept for different mice

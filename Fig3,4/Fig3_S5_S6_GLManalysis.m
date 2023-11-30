@@ -172,24 +172,16 @@ for iNeuron = find(ismember(spikeData.cell_ID,cell_IDs))'
     
     MOL_plotYYhat(temptrialData,params,Yvars,spikeData.cell_ID{iNeuron})
 end
-
-%% Correct for negative R2: 
-cvR2_nn                      = cvR2;
-cvR2_nn(cvR2_nn<0)           = 0;
-cvR2_cat_nn                  = cvR2_cat;
-cvR2_cat_nn(cvR2_cat_nn<0)   = 0;
-
-%% Report variance explained:
-idx     = strcmp(spikeData.area,'V1');
-fprintf('\nVariance explained across all V1 neurons (%2.3f, IQR %2.3f-%2.3f) (on trials excluding conflict trials) \n',...
-    nanmedian(cvR2_nn(idx,1)),prctile(cvR2_nn(idx,1),[25 75]));
-
+%Correct for negative R2: 
+cvR2_nn                      = cvR2; cvR2_nn(cvR2_nn<0)           = 0;
+cvR2_cat_nn                  = cvR2_cat; cvR2_cat_nn(cvR2_cat_nn<0)   = 0;
 
 %% Show cvR2 for each predictor subset and area: 
 params.nExperiments     = length(params.Experiments);
 params.areas            = {'V1' 'A1'};% 'PPC' 'CG1'};
 params.nAreas           = length(params.areas); 
 
+close all;
 figure; set(gcf,'units','normalized','Position',[0.2 0.43 0.22 0.3],'color','w'); hold all;
 
 params.colors_splits = {[0.4 0.4 0.4] [0 0 0.8] [0.8 0 0] [0.1 0.7 0.3]};
@@ -201,11 +193,13 @@ for iArea = 1:params.nAreas
         tmp     = cvR2_cat_nn(idx,iC);
         
 %         (boxplot)
-%         tmp     = tmp(tmp~=0);
-        h = boxplot(tmp, 'plotstyle','compact','positions',iArea + iC/(params.nShuffleCats+1),...
-        'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+%         h = boxplot(tmp, 'plotstyle','compact','positions',iArea + iC/(params.nShuffleCats+1),...
+%         'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+%         'colors','k','widths',0.18);
+%         handles(iC) = h(5);
+        boxplotPerc(tmp, [10,90],'plotstyle','compact','positions',iArea + iC/(params.nShuffleCats+1),...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,...
         'colors','k','widths',0.18);
-        handles(iC) = h(5);
         %         (barplot)
 %         handles(iC) = bar(iArea + iC/(params.nShuffleCats+1),nanmean(tmp),0.18,'k');
 %         set(handles(iC),'FaceColor',params.colors_splits{iC})
@@ -216,7 +210,7 @@ h = findobj(gca,'tag','Outliers');
 delete(h)
 h = findobj(gca,'Tag','Box');
 for j=1:length(h)
-    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_splits{mod(j-1,4)+1},'FaceAlpha',1);
+    handles(j) = patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_splits{mod(-j,4)+1},'FaceAlpha',1);
 end
 
 %statistics:
@@ -273,10 +267,11 @@ writetable(tbl,'SourceData_Fig3d_AC_VarianceExplainedGLM.xlsx')
 
 set(gca,'XTick',1.5:1:5.5,'XTickLabels',params.areas,'YTick',0:0.02:0.2)
 xlim([1 1+params.nAreas])
-legend(handles(1:4),{'Trial' 'Visual' 'Audio' 'Motor'},'Location','NorthWest'); legend boxoff;
+legend(fliplr(handles(1:4)),{'Trial' 'Visual' 'Audio' 'Motor'},'Location','NorthWest'); legend boxoff;
 
 export_fig(fullfile(params.savedir,sprintf('Box_cvR2_V1_AC_stats')),'-eps','-nocrop')
-ylim([-0.01 0.12])
+pause(0.5)
+ylim([-0.01 0.14])
 export_fig(fullfile(params.savedir,sprintf('Box_cvR2_V1_AC_axis')),'-eps','-nocrop')
 
 % export_fig(fullfile(params.savedir,sprintf('Bar_cvR2_V1_AC')),'-eps','-nocrop')
@@ -714,9 +709,12 @@ for iExp = 1:3
 %     errorbar(iExp,nanmean(datatoplot),nanstd(datatoplot)/sqrt(sum(idx_exp)),'k','LineWidth',1)
     
 %     (boxplot)
-    h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
-    'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
-    'colors','k','widths',0.8);
+%     h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
+%     'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+%     'colors','k','widths',0.8);
+    boxplotPerc(datatoplot, [10,90],'plotstyle','compact','positions',iExp,...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,...
+        'colors','k','widths',0.8);
     
 end
 
@@ -724,7 +722,7 @@ h = findobj(gca,'tag','Outliers');
 delete(h)
 h = findobj(gca,'Tag','Box');
 for j=1:length(h)
-%     patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
 end
 
 ylim([-0.7 2])
@@ -750,16 +748,19 @@ for iExp = 1:3
 %     h = bar(iExp,nanmean(datatoplot),'FaceColor',params.colors_experiments{iExp});
 %     errorbar(iExp,nanmean(datatoplot),nanstd(datatoplot)/sqrt(sum(idx_exp)),'k','LineWidth',1)
     %     (boxplot)
-    h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
-    'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
-    'colors','k','widths',0.8);
+%     h = boxplot(datatoplot, 'plotstyle','compact','positions',iExp,...
+%     'medianstyle','line','boxstyle','outline','outliersize',0.01,'whisker',1,...
+%     'colors','k','widths',0.8);
+    boxplotPerc(datatoplot, [10,90],'plotstyle','compact','positions',iExp,...
+        'medianstyle','line','boxstyle','outline','outliersize',0.01,...
+        'colors','k','widths',0.8);
 end
 
 h = findobj(gca,'tag','Outliers');
 delete(h)
 h = findobj(gca,'Tag','Box');
 for j=1:length(h)
-%     patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
+    patch(get(h(j),'XData'),get(h(j),'YData'),params.colors_experiments{mod(j-1,43)+1},'FaceAlpha',1);
 end
 
 ylim([-0.7 2])
